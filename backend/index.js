@@ -4,7 +4,10 @@ const axios = require("axios"); // Import axios
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: true }));
+app.use(cors({
+  origin: ['https://chatting-platform.vercel.app'], // Replace with your frontend URL
+  credentials: true
+}));
 
 app.post("/authenticate", async (req, res) => {
   const { username } = req.body;
