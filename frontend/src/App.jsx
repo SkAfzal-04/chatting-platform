@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
-import AuthPage from './AuthPage';
-import ChatsPage from './ChatsPage';
-import './App.css'; // Ensure your styles are imported
+import { useState } from "react";
+import AuthPage from "./AuthPage";
+import ChatsPage from "./ChatsPage";
 
 function App() {
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // Start with no user
 
-    const handleAuth = (authenticatedUser) => {
-        setUser(authenticatedUser);
-    };
-
-    return (
-        <div className="background">
-            {user ? (
-                <ChatsPage user={user} />
-            ) : (
-                <AuthPage onAuth={handleAuth} />
-            )}
-        </div>
-    );
+  // If no user is set, show the AuthPage
+  if (!user) {
+    return <AuthPage onAuth={(user) => setUser(user)} />;
+  }
+  // If a user is present, show the ChatsPage
+  return <ChatsPage user={user} />;
 }
 
 export default App;
