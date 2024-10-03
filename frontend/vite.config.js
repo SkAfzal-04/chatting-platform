@@ -5,7 +5,8 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: ['react-chat-engine-advanced'],
+      // No externalization; all dependencies will be bundled
     },
   },
+  base: './',  // Ensures correct path resolution for deployment
 });
