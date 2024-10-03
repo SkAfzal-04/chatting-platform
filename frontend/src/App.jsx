@@ -1,16 +1,22 @@
-import React from 'react';
-import "./App.css"; // Ensure this path is correct
-import ChatsPage from "./ChatsPage"; // Ensure this path is correct
+import React, { useState } from 'react';
+import AuthPage from './AuthPage';
+import ChatsPage from './ChatsPage';
+import './App.css'; // Ensure your styles are imported
 
 function App() {
-    const user = {
-        username: "afzal", // Set the username directly for testing
-        secret: "your_secret_here" // Provide a secret value (can be any string for testing)
+    const [user, setUser] = useState(null);
+
+    const handleAuth = (authenticatedUser) => {
+        setUser(authenticatedUser);
     };
 
     return (
-        <div>
-            <ChatsPage user={user} />
+        <div className="background">
+            {user ? (
+                <ChatsPage user={user} />
+            ) : (
+                <AuthPage onAuth={handleAuth} />
+            )}
         </div>
     );
 }
