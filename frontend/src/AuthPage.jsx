@@ -11,10 +11,15 @@ const AuthPage = (props) => {
 
     try {
       const response = await axios.post('https://talk-two-xi.vercel.app/authenticate', { username });
-      // Assuming your backend returns user data in the response
-      props.onAuth({ username: response.data.username, secret: response.data.secret });
+
+      // Ensure the response contains the expected data
+      if (response.data.username && response.data.secret) {
+        props.onAuth({ username: response.data.username, secret: response.data.secret });
+      } else {
+        setError("Authentication failed. Please try again.");
+      }
     } catch (err) {
-      console.log('Authentication error:', err);
+      console.error('Authentication error:', err);
       setError("Authentication failed. Please try again.");
     }
   };
