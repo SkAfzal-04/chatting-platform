@@ -1,183 +1,91 @@
-/* App.css */
+import React, { useState } from 'react';
+import './App.css'; // Make sure to include your CSS
 
-.background {
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(75deg, rgb(20, 23, 33) 0%, rgb(20, 23, 33) 50%, rgba(20, 23, 33, 0.8) 100%);
-    display: table-cell;
-    vertical-align: middle;
-}
+// Sample user data for demonstration
+const usersData = [
+    { id: 1, username: 'Alice' },
+    { id: 2, username: 'Bob' },
+    { id: 3, username: 'Charlie' },
+    { id: 4, username: 'David' },
+    { id: 5, username: 'Eve' },
+];
 
-.form-card {
-    width: 50%;
-    max-width: 350px;
-    padding: 0% 25%;
-}
+const ChatsPage = ({ user }) => {
+    const [messages, setMessages] = useState({});
+    const [input, setInput] = useState('');
+    const [selectedUser, setSelectedUser] = useState(usersData[0]); // Default to first user
+    const [showUsers, setShowUsers] = useState(false); // State to toggle user list
 
-.form-title {
-    font-size: 42px;
-    font-family: 'Avenir';
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    color: #e8e8e8;
-    padding-bottom: 12px;
-}
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        if (input.trim()) {
+            const newMessage = {
+                from: user.username,
+                text: input,
+                to: selectedUser.username,
+            };
+            setMessages((prev) => ({
+                ...prev,
+                [selectedUser.username]: [...(prev[selectedUser.username] || []), newMessage],
+            }));
+            setInput(''); // Clear the input field after sending
+        }
+    };
 
-.form-subtitle {
-    font-size: 18px;
-    font-family: 'Avenir';
-    letter-spacing: 0.5px;
-    color: #afafaf;
-    padding-bottom: 24px;
-}
+    const toggleUserList = () => {
+        setShowUsers(!showUsers);
+    };
 
-.auth {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-    padding-bottom: 12px;
-}
+    return (
+        <div className="chat-wrapper">
+            <div className={`user-list ${showUsers ? 'open' : ''}`}>
+                <button className="hamburger" onClick={toggleUserList}>
+                    ☰
+                </button>
+                {showUsers && (
+                    <div className="user-list-content">
+                        <h3 style={{ color: '#e8e8e8' }}>Users</h3>
+                        {usersData.map((userItem) => (
+                            <div
+                                key={userItem.id}
+                                onClick={() => {
+                                    setSelectedUser(userItem);
+                                    setShowUsers(false); // Close user list on selection
+                                }}
+                                className={`user-item ${selectedUser.id === userItem.id ? 'active' : ''}`}
+                            >
+                                {userItem.username}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
 
-.auth-label {
-    position: absolute;
-    top: 8px;
-    left: 18px;
-    font-size: 11px;
-    color: rgb(175, 175, 175);
-    font-family: Avenir;
-    width: 100px;
-}
+            <div className="chat-window">
+                <div className="chat-header">
+                    <h2 style={{ color: '#e8e8e8' }}>Chat with {selectedUser.username}</h2>
+                </div>
+                <div className="chat-messages">
+                    {(messages[selectedUser.username] || []).map((msg, index) => (
+                        <div key={index} className={`chat-message ${msg.from === user.username ? 'sent' : 'received'}`}>
+                            <strong>{msg.from}: </strong>{msg.text}
+                        </div>
+                    ))}
+                </div>
 
-.auth-input {
-    background-color: #3e404b;
-    color: white;
-    font-family: "Avenir";
-    outline: none;
-    border: none;
-    border-radius: 8px;
-    padding: 24px 18px 12px 18px;
-    width: calc(100% - 18px - 18px);
-    margin-bottom: 12px;
-}
+                <form onSubmit={handleSendMessage} className="message-input">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Type your message..."
+                        className="auth-input" // Use existing auth-input class
+                    />
+                    <button type="submit" className="auth-button">Send</button> {/* Use existing auth-button class */}
+                </form>
+            </div>
+        </div>
+    );
+};
 
-.auth-button {
-    width: 100%;
-    height: 53px;
-    color: white;
-    background-color: #fa541c;
-    border: none;
-    outline: none;
-    border-radius: 8px;
-    font-family: "Avenir";
-    cursor: pointer;
-    transition: all 0.44s ease;
-}
-
-.auth-button:hover {
-    filter: brightness(145%);
-}
-
-.chat-wrapper {
-    height: 80vh; 
-    width: 80%;
-    margin: 10% auto; 
-    color: white; 
-    background: rgb(43, 47, 60);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.user-list {
-    width: 220px;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-    margin-right: 15px;
-    overflow-y: auto;
-}
-
-.user-item {
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    cursor: pointer;
-}
-
-.user-item:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.active {
-    background-color: rgba(255, 255, 255, 0.3);
-    font-weight: bold;
-}
-
-.chat-window {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.chat-header {
-    background-color: #00bcd4;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
-
-.chat-messages {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.chat-message {
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 5px;
-}
-
-.sent {
-    background-color: #d1e7dd;
-    text-align: right;
-}
-
-.received {
-    background-color: #f8d7da;
-}
-
-.message-input {
-    display: flex;
-    padding: 10px;
-}
-
-.input-field {
-    flex: 1;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-}
-
-.send-button {
-    background-color: #ff6f61;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 15px;
-    transition: background-color 0.3s;
-}
-
-.send-button:hover {
-    background-color: #e65c50;
-}
+export default ChatsPage;
