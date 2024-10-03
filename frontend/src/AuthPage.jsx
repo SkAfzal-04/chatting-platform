@@ -5,15 +5,16 @@ const AuthPage = (props) => {
     const onSubmit = (e) => {
         e.preventDefault();
         const { value } = e.target[0];
-        axios.post('https://chatting-platform.onrender.com/authenticate', { username: value })
-            .then(response => {
-                // Assuming your API returns user details upon authentication
-                const user = { ...response.data, secret: value };
-                props.onAuth(user); // Pass the user data to App
-            })
-            .catch(error => {
-                console.log('Error during authentication', error);
-            });
+        // For testing, define static user
+        const staticUser = { username: value, secret: 'staticSecret' }; // Static user for testing
+        
+        // Simulating user authentication
+        // Normally, you'd authenticate with an API, but here we just use the static user.
+        if (value) {
+            props.onAuth(staticUser); // Pass the static user to App
+        } else {
+            console.log('Username is required');
+        }
     };
 
     return (
