@@ -13,7 +13,7 @@
     "axios": "^1.7.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-chat-advanced": "^1.0.0"
+    "react-chat-engine-advanced": "^1.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
