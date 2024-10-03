@@ -3,10 +3,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  base: './', // Ensures correct path resolution for deployment
   build: {
     rollupOptions: {
-      // No externalization; all dependencies will be bundled
+      // Externalization removed; include all dependencies in the bundle
     },
   },
-  base: './',  // Ensures correct path resolution for deployment
 });
