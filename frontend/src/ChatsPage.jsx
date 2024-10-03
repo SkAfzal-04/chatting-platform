@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './App.css'; // Make sure to include your CSS
 
 // Sample user data for demonstration
 const usersData = [
@@ -13,6 +14,7 @@ const ChatsPage = ({ user }) => {
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
     const [selectedUser, setSelectedUser] = useState(usersData[0]); // Default to first user
+    const [showUsers, setShowUsers] = useState(false); // State to toggle user list
 
     const handleSendMessage = (e) => {
         e.preventDefault();
@@ -30,19 +32,33 @@ const ChatsPage = ({ user }) => {
         }
     };
 
+    const toggleUserList = () => {
+        setShowUsers(!showUsers);
+    };
+
     return (
         <div className="chat-wrapper">
-            <div className="user-list">
-                <h3 style={{ color: '#e8e8e8' }}>Users</h3>
-                {usersData.map((userItem) => (
-                    <div
-                        key={userItem.id}
-                        onClick={() => setSelectedUser(userItem)}
-                        className={`user-item ${selectedUser.id === userItem.id ? 'active' : ''}`}
-                    >
-                        {userItem.username}
+            <div className={`user-list ${showUsers ? 'open' : ''}`}>
+                <button className="hamburger" onClick={toggleUserList}>
+                    ☰
+                </button>
+                {showUsers && (
+                    <div className="user-list-content">
+                        <h3 style={{ color: '#e8e8e8' }}>Users</h3>
+                        {usersData.map((userItem) => (
+                            <div
+                                key={userItem.id}
+                                onClick={() => {
+                                    setSelectedUser(userItem);
+                                    setShowUsers(false); // Close user list on selection
+                                }}
+                                className={`user-item ${selectedUser.id === userItem.id ? 'active' : ''}`}
+                            >
+                                {userItem.username}
+                            </div>
+                        ))}
                     </div>
-                ))}
+                )}
             </div>
 
             <div className="chat-window">
