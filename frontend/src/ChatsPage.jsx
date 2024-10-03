@@ -31,46 +31,41 @@ const ChatsPage = ({ user }) => {
     };
 
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
-            {/* User List */}
-            <div style={{ width: '200px', borderRight: '1px solid #ccc', overflowY: 'auto' }}>
-                <h3>Users</h3>
+        <div className="chat-wrapper">
+            <div className="user-list">
+                <h3 style={{ color: '#e8e8e8' }}>Users</h3>
                 {usersData.map((userItem) => (
                     <div
                         key={userItem.id}
                         onClick={() => setSelectedUser(userItem)}
-                        style={{
-                            padding: '10px',
-                            cursor: 'pointer',
-                            backgroundColor: selectedUser.id === userItem.id ? '#f0f0f0' : 'white',
-                        }}
+                        className={`user-item ${selectedUser.id === userItem.id ? 'active' : ''}`}
                     >
                         {userItem.username}
                     </div>
                 ))}
             </div>
 
-            {/* Chat Window */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ flex: 1, padding: '10px', borderBottom: '1px solid #ccc', overflowY: 'auto' }}>
-                    <h2>Chat with {selectedUser.username}</h2>
+            <div className="chat-window">
+                <div className="chat-header">
+                    <h2 style={{ color: '#e8e8e8' }}>Chat with {selectedUser.username}</h2>
+                </div>
+                <div className="chat-messages">
                     {(messages[selectedUser.username] || []).map((msg, index) => (
-                        <div key={index} style={{ margin: '5px 0' }}>
+                        <div key={index} className={`chat-message ${msg.from === user.username ? 'sent' : 'received'}`}>
                             <strong>{msg.from}: </strong>{msg.text}
                         </div>
                     ))}
                 </div>
-                
-                {/* Message Input */}
-                <form onSubmit={handleSendMessage} style={{ display: 'flex', padding: '10px' }}>
+
+                <form onSubmit={handleSendMessage} className="message-input">
                     <input
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Type your message..."
-                        style={{ flex: 1, padding: '10px' }}
+                        className="auth-input" // Use existing auth-input class
                     />
-                    <button type="submit" style={{ padding: '10px' }}>Send</button>
+                    <button type="submit" className="auth-button">Send</button> {/* Use existing auth-button class */}
                 </form>
             </div>
         </div>
